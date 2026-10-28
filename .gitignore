@@ -1,0 +1,9 @@
+*.blend
+*.blend1
+refs/
+renders/
+textures/
+__pycache__/
+*_trace.json
+*_trace_debug.jpg
+_contact_sheet.jpg
