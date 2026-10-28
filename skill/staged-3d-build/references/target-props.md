@@ -18,6 +18,11 @@
 - **Holes, windows, pockets:** boolean the cutters, then apply them. Line up the parts that pass through holes, using the same constants in both scripts.
 - **Containers** (scabbards, sheaths, holsters): follow a smooth fit of the contained part's long curve, not its tip kink. Check numerically that every vertex of the contained part is inside.
 
+## Short, boxy or round objects (not long and thin)
+- `trace_silhouette.py` traces along the image's x axis; for an upright object pass `--vertical`. For a box-like prop (a lantern), skip the loft and build from the real part list instead: frame rails, posts, cap and base as separate shapes sized from the ref, then use the trace only to check the outline.
+- Straps over corners: see the "around corners" recipe in `stages.md` stage 3.
+- Lit objects (lanterns, lamps): model the light source (candle, bulb) as its own part in the blockout so the glass and the shadows can be judged early.
+
 ## Typical hero details
 Grip wraps, cord or leather bindings, chain mail rows, rivet lines, scale or lamellar plates, stitched seams. Build one period, then use Array + Lattice.
 
@@ -25,6 +30,8 @@ Grip wraps, cord or leather bindings, chain mail rows, rivet lines, scale or lam
 | Material | Wear and finish |
 |---|---|
 | Iron | rust in pits (AO × noise); rubbed edges lighter and smoother |
+| Forged / blackened iron | near-black base (albedo ~0.03), hammer marks from a Voronoi bump, soot darker inside cavities, bright worn metal only where hands touch (handles, latches, door edges) |
+| Horn / glass panes | translucent amber or clear transmission, grime ring at the frame edges; a light inside means the studio watts need re-tuning |
 | Brass / copper / gold | dark patina in recesses; polished high points |
 | Lacquer / paint | chips at the ends and edges (pointiness × noise × end mask); clear coat micro-scratches |
 | Polished steel | lengthwise polish scratches; faint grain; heat-treatment patterns from attributes |

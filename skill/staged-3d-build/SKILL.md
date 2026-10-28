@@ -18,12 +18,18 @@ Works through the live Blender MCP (`execute_blender_code`, `look`). Single-imag
    - **output use:** render / web GLB / Roblox;
    - **reference source:** gather / user's own;
    - **gates:** pause at the blockout and the hero unit, or run straight through after plan approval.
-2. Check Blender: `get_addon_status`, `get_scene_info`. Note the version, add-ons, GPU, and enabled asset libraries.
-3. Write the plan: Context, Project layout, Stages 1–9 with deliverables, Verification. Exit plan mode.
-4. On approval:
+2. Check Blender (read-only) before asking anything: `get_addon_status`, `get_scene_info`. Note the version, add-ons, GPU, and enabled asset libraries.
+3. Put these in the first question batch, each with a recommended answer:
+   - project folder (recommend `~/Documents/Blender/<Project>`);
+   - pose (A-pose or T-pose) and triangle budget, for characters and Roblox;
+   - whether the user has their own concept art or references.
+4. Write the plan: Context, Project layout, Stages 1–9 with deliverables, Verification. Exit plan mode. Plan approval counts as approval to create the folder and the files named in the plan. Ask again for anything outside it.
+5. On approval:
    - create `<Project>/refs, scripts, textures, renders`;
    - copy `scripts/bl_lib.py` into the project's `scripts/`;
    - save `<Project>.blend`.
+
+**Quick path:** if the request says quick, fast, today, or "don't overthink it", follow the Quick path section below instead of the full stage list.
 
 ## Stages (details, checks and gates: `references/stages.md`)
 | # | Stage | Deliverable | Gate (default) |
@@ -39,6 +45,21 @@ Works through the live Blender MCP (`execute_blender_code`, `look`). Single-imag
 | 9 | Output | `.blend` / baked GLB (`references/target-web.md`) / Roblox checks (`references/target-roblox.md`) | — |
 
 If the user says to keep going ("go on from now"), drop the remaining pauses but keep every check.
+
+## Quick path (for "quick", "today", "don't overthink it")
+Say up front what is shortened and what outside delays remain (for example marketplace review, a client sign-off). Then:
+1. **One question batch**, 3 questions at most, each with a recommended answer. If the user says "just go", use the recommendations.
+2. **References:** 3–5 images of one object, or the user's own. Skip the trace unless a long profile needs it.
+3. **Blockout + hero unit together**, then ONE pause showing both.
+4. **Merge detail passes 2 and 3** into one pass. Run `bl_cleanup.py` at the end of it.
+5. **UVs + wear in one step.** Wear stays at the two mask types (AO for crevices, Pointiness for edges).
+6. **One hero render** plus one close-up.
+
+**Never shortened, even on the quick path:**
+- the hero detail is built as ONE unit and repeated, never modelled as one long shape;
+- numeric checks (dimensions, open edges, triangle count, spec limits);
+- `bl_uv_overlap_check.py`;
+- the target's spec limits (Roblox, web).
 
 ## Working rules
 - **Every part comes from a re-runnable script in `<Project>/scripts/`.** Each script begins `exec(open(".../bl_lib.py").read())` and replaces its own objects. Re-running a script must never stack edits; rebuild from source objects.

@@ -22,3 +22,8 @@
 | Wikimedia HTTP 429 | too many requests | Backoff + delay (built into `fetch_refs.py`); delete 0-byte partial files with `find refs -type f -size 0 -delete` (never `find refs -size 0`) |
 | Blender UI ops fail in scripts | no area context | `bpy.context.temp_override(area=VIEW_3D, region=WINDOW)` |
 | Context breaks mid-script | `read_homefile` | Never call it; clear objects with `bpy.data.objects.remove` |
+| Hero detail isn't a line (mail, scales, corner straps) | Array + Lattice only fits detail repeating along a path | Use the recipe table in `stages.md` stage 3: radial Array, one tileable cell + Geometry Nodes instancing, or Curve-modifier bending |
+| User says "quick" and the full 9 stages run anyway | no shortened path | SKILL.md "Quick path": 3 questions max, merge passes 2+3, one hero render; never skip the single-unit hero detail, numeric checks, UV overlap, or spec limits |
+| Roblox plan promises "live today" | upload, fee and moderation sit outside Blender | State it at the start (`target-roblox.md`) |
+| Wide brim / cape breaks the accessory size limit late | bounding box checked only at export | Compare to the spec box at the blockout |
+| Rigged mesh has live Array/GN modifiers or real rings weighted | detail layer weighted instead of the shell | Rig the shell; bake the repeat to maps or keep it as parented instances (`target-characters.md`) |

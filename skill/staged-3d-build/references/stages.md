@@ -12,6 +12,7 @@ Save `<Project>_v0N_<stage>.blend` at the end of each stage.
    - **User's own:** read them.
    - **Public:** `python -I scripts/fetch_refs.py --query "..." --out refs`. Commons search; museum open-access images are CC0/PD. Group the filenames by part (`full_`, `detail_`, `hero_`, ...).
 3. `python -I scripts/contact_sheet.py refs` and look at the sheet. Pick ONE **design set**, preferably one object shot from many angles, so all parts agree. Then pick a **trace source**: a clean silhouette on a plain background, shot square-on.
+   **No clean photos exist (stylized or invented design):** ask whether the user has concept art. If not, agree a style target and a proportion sheet in writing (height, heads-tall, shoulder/hip/knee heights), then draw nothing from memory: build the blockout from the sheet and use real-world photos only for the material and detail close-ups. Concept art is not licence-free; use it for reference only and don't redistribute it.
 4. Set the real scale from known dimensions, a ruler in a photo, or published specs. If refs disagree in scale, take lengths/ratios from the design set and cross-sections from real-world standards, and write that decision down.
 5. Trace: `python -I scripts/trace_silhouette.py <image> --length-m <real length> --x0 <px> --x1 <px>`. View the debug overlay, and fix the threshold or crop until the line hugs the edge.
 6. Place the refs as image empties with `add_ref()`. Anchor each one to a **measured** pixel and verify against the traced mesh in front ortho with X-ray.
@@ -45,11 +46,20 @@ Save `<Project>_v0N_<stage>.blend` at the end of each stage.
    - give it its own UVs if it will be textured along its length.
 
    **Gate:** show the single unit, and a 3-copy preview so the user can see the tiling.
-4. **Repeat it:**
-   - an Array modifier (constant offset = pitch, merge on, UV offset per copy);
-   - fit to the host shape with a Lattice whose points follow the host's real radii/axis;
-   - trim the hidden ends with a Geometry Nodes Delete-by-position;
-   - phase the pattern so no high point sits right at a fitting edge.
+4. **Repeat it.** Pick the recipe by the shape of the repetition:
+
+   | The detail repeats... | Recipe |
+   |---|---|
+   | along a line (wrap on a grip, rivets down a strap, chain links) | Array (constant offset = pitch, merge on, UV offset per copy) |
+   | around a ring (braid on a hat band, studs round a rim) | build the unit along a short arc, then Array with a radial offset, or an Array + Curve modifier on a circle; the last unit must meet the first |
+   | across a surface (chain mail, scales, quilting, hex plating) | build ONE cell that tiles on all four edges, then Geometry Nodes: instance the cell on the points of the host shell, aligned to the surface normal. Check it with a 3×3 tile preview first |
+   | around corners (a strap bending over a box frame) | model the straight strap + rivet unit, then bend it with a Curve modifier along a path that follows the corners; keep rivets rigid by instancing them on the curve's points |
+
+   Then, for all of them:
+   - fit to the host shape (a Lattice whose points follow the host's real radii/axis, or the curve/GN shell above);
+   - trim hidden ends with a Geometry Nodes Delete-by-position;
+   - phase the pattern so no high point sits right at a fitting edge;
+   - if the model will be rigged, exported to web, or sent to Roblox, decide now whether the repeat stays geometry or is baked to maps (see the target files).
 5. Continue in the stated direction (e.g. hilt → blade). Refine each fitting so it overlaps its neighbours by about 1 mm, with no gaps.
 
 **Verify:**
@@ -90,6 +100,7 @@ Save `<Project>_v0N_<stage>.blend` at the end of each stage.
   - **AO:** dirt, patina and rust in crevices.
   - **Pointiness:** rubbed, polished edges, and chips on exposed edges.
   - **Noise:** breaks up every mask.
+- **See-through and glowing surfaces** (glass, horn, thin cloth, candle flame): use Principled Transmission (glass) or a thin translucent shader with a warm tint (horn), and mark the lit object's light source as an emissive mesh plus a point light. Cycles: raise the glossy/transmission bounces by 2, and re-tune the studio lights, because an inner light changes the exposure of the whole shot.
 - Patterns that follow geometry (temper lines, stripes, grain) come from **mesh attributes** written by script (e.g. a 0→1 distance from an edge), or from object coordinates along the long axis.
 - **Test renders:** do them in Cycles at 50% resolution and about 48 samples. Judge them after viewing; fix exposure first, then colour.
 

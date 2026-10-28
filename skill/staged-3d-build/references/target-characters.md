@@ -5,6 +5,18 @@
 - **Close-ups:** face (front and profile), hands, feet, hair from several angles, and every costume detail (seams, buckles, folds, patterns).
 - **Proportion data:** height, plus heads-tall; e.g. about 7.5 for realistic adults, 2–4 for stylized/chibi.
 
+## Stylized characters (no turnaround, or between standard proportions)
+- Agree a written proportion sheet before modelling: height, heads-tall (6 sits between realistic ~7.5 and chibi 2–4), and which parts are exaggerated (hands, feet, shoulders).
+- Pose and budget are Stage 0 questions: A-pose is the default for rigging, and the triangle budget comes from the use (render / game / web).
+
+## Rigging rules for repeated geometry (mail, scales, plates)
+- **The rigged mesh is the base shell.** Rings or scales are an instancing layer on top of it, never the thing that gets weighted.
+- Pick one of two outputs and say which in the plan:
+  1. **Baked:** normal + opacity + AO maps on the shell. Best for animation and game/web. The shell stays light and deforms cleanly.
+  2. **Instanced:** keep the Geometry Nodes setup live, parented to the shell, with instances following the shell surface. Best for close-up renders. Apply it only for a still.
+- Modifier order on rigged parts: Armature last; Mirror applied before weighting; no Array/GN modifiers on the weighted mesh itself.
+- Rigid pieces (pauldron plates, buckles) attach whole to one bone; keep them separate objects.
+
 ## Stage notes
 - **References:**
   - place the front ref on the XZ plane and the side ref on the YZ plane;
