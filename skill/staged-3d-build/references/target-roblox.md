@@ -2,7 +2,7 @@
 
 Use the same stages, with the specs as hard limits checked at blockout, pass 3 and output.
 
-- **If `roblox-character-blender` is installed:** follow its type selection (R15 body, layered clothing, rigid accessory, dynamic head) and its spec reference for the numbers. If `roblox-avatar-designer` is installed, use it for classic 2D clothing templates.
+- **If `roblox-character-blender` is installed:** follow its type selection (R15 body, layered clothing, rigid accessory, dynamic head) and its spec file for the numbers (`roblox-character-blender/references/roblox-avatar-specs.md`, in the same skills folder as this skill). If `roblox-avatar-designer` is installed, use it for classic 2D clothing templates.
 - **Otherwise:** take every number from the official docs at https://create.roblox.com/docs/art/characters (body/accessory/clothing specification pages). Never guess. Any number you couldn't verify gets marked UNVERIFIED in the plan.
 
 ## Say these up front (before any work)

@@ -21,3 +21,17 @@ Procedural Cycles materials (AO, Pointiness, noise) and lights do **not** export
    - open it in a glTF viewer (or the generated page);
    - textures aren't stretched;
    - normals face the right way.
+
+## Glow / emission (energy cells, lamps, screens)
+- A glow is an emissive texture plus an emission strength; the bloom around it is added by the viewer, not baked.
+- Bake: give the glowing material its colour as Emission, set other materials' emission to black, then bake the **Emit** pass to `<set>_emissive.png`.
+- In the rebuilt Principled material: plug that image into Emission Color and set Emission Strength (glTF carries it; strengths above 1 need the emissive-strength extension that Blender's glTF exporter writes).
+- Verify in the viewer that bloom is enabled; if not, the cells will look flat. Flag it to the user.
+
+## Triangle budget starting points (check against the page's real needs; ask when unsure)
+| Object | Starting budget |
+|---|---|
+| small handheld prop (pistol, lantern, tool) | 5–20k tris |
+| large hero prop or vehicle | 20–50k tris |
+| character | 20–60k tris |
+Use the low end when the page also loads a lot else, or the user says "light". Count tris per part at every stage, not only at export, and texture fine detail rather than modelling it.

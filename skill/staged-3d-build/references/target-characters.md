@@ -14,8 +14,18 @@
 - Pick one of two outputs and say which in the plan:
   1. **Baked:** normal + opacity + AO maps on the shell. Best for animation and game/web. The shell stays light and deforms cleanly.
   2. **Instanced:** keep the Geometry Nodes setup live, parented to the shell, with instances following the shell surface. Best for close-up renders. Apply it only for a still.
-- Modifier order on rigged parts: Armature last; Mirror applied before weighting; no Array/GN modifiers on the weighted mesh itself.
+- Modifier order on rigged parts: Armature last; Mirror already applied; no Array/GN modifiers on the weighted mesh itself.
 - Rigid pieces (pauldron plates, buckles) attach whole to one bone; keep them separate objects.
+
+## Baking a repeated surface (mail, scales) to maps
+Preferred (small, tileable): bake ONE cell, then tile it.
+1. Build one cell as real geometry on a flat plane with the cell's tile size; give the plane a UV that fills 0–1 exactly.
+2. In Cycles, bake onto that plane from the cell geometry (selected-to-active, small ray distance): Normal (tangent), AO, and an opacity map (give the rings a white emission and the background black, then bake the Emit pass).
+3. Put the maps on the shell's material and set the UV scale so one tile matches the real ring size. Check the ring size in cm against the ref.
+
+Fallback (whole-surface bake): instance the cell over the shell, bake selected-to-active from the instanced copy to the shell's unique UVs, then delete the copy. This costs a large texture, so use it only when the surface pattern must follow the body (decals, damage).
+
+Triangle budget for a rigged character: set it in Stage 0 from the use (render: no hard cap; game/web: agree a number with the user), write it down, and keep a running count per part at every stage.
 
 ## Stage notes
 - **References:**
@@ -37,12 +47,12 @@
 
   Hair uses **real meshes or hair cards**, not scripted strands. If a matching hair asset exists, fit it.
 - **Detail pass 3:**
-  - apply the Mirror (unless UVs stay mirrored to save space);
+  - apply the Mirror before any weighting (always);
   - check the rest pose is symmetric;
   - check normals and open edges;
   - check that clothing doesn't intersect the body (offset ≥ 1 mm);
   - check scale is 1 and the origin is at the feet.
-- **UVs:** seams hidden (inner arms, inner legs, behind the hairline, under the clothing). The face gets the largest texel density.
+- **UVs:** unique (non-overlapping) by default, so wear can differ left and right. If the user chooses mirrored UV halves to save texture space, list those mirrored pairs as the only allowed overlap and exclude them from the overlap check. Seams hidden (inner arms, inner legs, behind the hairline, under the clothing). The face gets the largest texel density.
 - **Texturing:**
   - skin: subsurface 0.1–0.2, roughness 0.45–0.55, with AO darkening in creases;
   - cloth: sheen 0.3–0.6 with a weave bump, plus dirt at hems and edges;

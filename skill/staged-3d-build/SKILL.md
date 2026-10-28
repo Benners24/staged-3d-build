@@ -18,7 +18,7 @@ Works through the live Blender MCP (`execute_blender_code`, `look`). Single-imag
    - **output use:** render / web GLB / Roblox;
    - **reference source:** gather / user's own;
    - **gates:** pause at the blockout and the hero unit, or run straight through after plan approval.
-2. Check Blender (read-only) before asking anything: `get_addon_status`, `get_scene_info`. Note the version, add-ons, GPU, and enabled asset libraries.
+2. Check Blender before asking anything: `get_addon_status`, `get_scene_info`. Note the version, add-ons, GPU, and enabled asset libraries. Read-only calls (these two, `look`) are allowed in plan mode; anything that creates, changes or saves waits for plan approval.
 3. Put these in the first question batch, each with a recommended answer:
    - project folder (recommend `~/Documents/Blender/<Project>`);
    - pose (A-pose or T-pose) and triangle budget, for characters and Roblox;
@@ -29,7 +29,7 @@ Works through the live Blender MCP (`execute_blender_code`, `look`). Single-imag
    - copy `scripts/bl_lib.py` into the project's `scripts/`;
    - save `<Project>.blend`.
 
-**Quick path:** if the request says quick, fast, today, or "don't overthink it", follow the Quick path section below instead of the full stage list.
+**Quick path:** if the request says quick, fast, light, simple, today, tomorrow, ASAP, "by <date within a couple of days>", or "don't overthink it", follow the Quick path section below instead of the full stage list. If the deadline is unclear, ask in the question batch.
 
 ## Stages (details, checks and gates: `references/stages.md`)
 | # | Stage | Deliverable | Gate (default) |
@@ -46,13 +46,13 @@ Works through the live Blender MCP (`execute_blender_code`, `look`). Single-imag
 
 If the user says to keep going ("go on from now"), drop the remaining pauses but keep every check.
 
-## Quick path (for "quick", "today", "don't overthink it")
+## Quick path (short deadline or "quick / light / don't overthink it")
 Say up front what is shortened and what outside delays remain (for example marketplace review, a client sign-off). Then:
 1. **One question batch**, 3 questions at most, each with a recommended answer. If the user says "just go", use the recommendations.
-2. **References:** 3–5 images of one object, or the user's own. Skip the trace unless a long profile needs it.
+2. **References:** 3–5 images of one object, or the user's own. Still measure the real scale and place the ref empties (cheap). Skip the trace unless a long profile needs it.
 3. **Blockout + hero unit together**, then ONE pause showing both.
 4. **Merge detail passes 2 and 3** into one pass. Run `bl_cleanup.py` at the end of it.
-5. **UVs + wear in one step.** Wear stays at the two mask types (AO for crevices, Pointiness for edges).
+5. **UVs + wear in one step, in this order:** UVs → overlap check → wear (AO for crevices, Pointiness for edges) → bake, if the target needs image textures.
 6. **One hero render** plus one close-up.
 
 **Never shortened, even on the quick path:**

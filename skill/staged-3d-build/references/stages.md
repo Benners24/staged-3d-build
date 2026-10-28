@@ -11,6 +11,7 @@ Save `<Project>_v0N_<stage>.blend` at the end of each stage.
 2. Gather the images:
    - **User's own:** read them.
    - **Public:** `python -I scripts/fetch_refs.py --query "..." --out refs`. Commons search; museum open-access images are CC0/PD. Group the filenames by part (`full_`, `detail_`, `hero_`, ...).
+   - **If Commons is thin** (search returns poor or few results): use museum open-access collections (e.g. the Met, Rijksmuseum, Smithsonian, Cleveland Museum of Art, Walters). Download the images by hand or from direct URLs, check each item's licence on its page, and add a row to `SOURCES.md` yourself (file, URL, licence, author). Or ask the user for their own images.
 3. `python -I scripts/contact_sheet.py refs` and look at the sheet. Pick ONE **design set**, preferably one object shot from many angles, so all parts agree. Then pick a **trace source**: a clean silhouette on a plain background, shot square-on.
    **No clean photos exist (stylized or invented design):** ask whether the user has concept art. If not, agree a style target and a proportion sheet in writing (height, heads-tall, shoulder/hip/knee heights), then draw nothing from memory: build the blockout from the sheet and use real-world photos only for the material and detail close-ups. Concept art is not licence-free; use it for reference only and don't redistribute it.
 4. Set the real scale from known dimensions, a ruler in a photo, or published specs. If refs disagree in scale, take lengths/ratios from the design set and cross-sections from real-world standards, and write that decision down.
@@ -60,6 +61,14 @@ Save `<Project>_v0N_<stage>.blend` at the end of each stage.
    - trim hidden ends with a Geometry Nodes Delete-by-position;
    - phase the pattern so no high point sits right at a fitting edge;
    - if the model will be rigged, exported to web, or sent to Roblox, decide now whether the repeat stays geometry or is baked to maps (see the target files).
+
+   **Geometry or texture?** Detail that changes the silhouette or is bigger than about 2 mm at real size is geometry. Finer detail (weave, grain, small scratches) is a normal map or texture. When a triangle budget exists, texture it.
+
+   **Corner recipe (straps over a box frame):**
+   1. Model the strap as a flat strip with the real width and thickness, long enough for the whole path.
+   2. Draw the path as a curve along the frame with a small fillet at each corner (a sharp corner folds the strap).
+   3. Bend the strip with a Curve modifier on that path.
+   4. Place the rivets with Geometry Nodes: Curve to Points (length mode, spacing = the rivet pitch), rotation from the curve tangent/normal, then Instance on Points with ONE rivet mesh. Instances stay rigid and evenly spaced, and a single mesh keeps the triangle count down.
 5. Continue in the stated direction (e.g. hilt → blade). Refine each fitting so it overlaps its neighbours by about 1 mm, with no gaps.
 
 **Verify:**
